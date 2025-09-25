@@ -1,60 +1,13 @@
-Absolutely! Here's a complete `README.md` file that includes:
+## 📘 AI YAML Validator
 
-* ✅ Python & virtual environment setup
-* ✅ Installation steps
-* ✅ Example usage of the validator
-* ✅ Auto-fix mode
-* ✅ Environment-specific vs full validation
-* ✅ Template structure and extension instructions
+This project is an **AI-powered YAML configuration validator** for enterprise environments.
+It validates configuration files (like GitHub Actions workflows) against environment-specific templates such as **dev**, **staging**, and **prod**.
 
----
+The validator detects:
 
-## 📄 `README.md`
-
-````markdown
-# 🧠 AI-Powered YAML Configuration Validator
-
-This project is an **AI-enhanced, rule-based YAML validator** for enterprise-grade GitHub Actions workflows or other environment-based YAML configurations. It ensures structural integrity, identifies missing keys, and offers an optional auto-fix mode for environment-specific configurations (like `dev.yaml`, `prod.yaml`, etc.).
-
----
-
-## 🚀 Quick Setup
-
-### ✅ 1. Check Python Version
-
-```bash
-py --version
-````
-
-> Make sure you're using Python **3.10+**.
-
----
-
-### ✅ 2. Clone the Repository
-
-```bash
-git clone <your-repo-url>
-cd ai_yaml_validator
-```
-
----
-
-### ✅ 3. Create and Activate Virtual Environment
-
-```bash
-py -m venv .venv
-.venv\Scripts\activate          # Windows
-# OR
-source .venv/bin/activate       # macOS/Linux
-```
-
----
-
-### ✅ 4. Install Dependencies
-
-```bash
-pip install -r requirements.txt
-```
+* ❌ Missing keys
+* ⚠️ Structural differences (with ability to ignore known environment-based changes)
+* ✅ Optionally auto-fixes the issues by generating a `_fixed.yaml`
 
 ---
 
@@ -68,7 +21,13 @@ ai_yaml_validator/
 ├── schema_loader.py
 ├── requirements.txt
 └── templates/
-    └── dotnet/
+    ├── dotnet/
+    │   ├── template.yaml
+    │   └── env_templates/
+    │       ├── dev.yaml
+    │       ├── staging.yaml
+    │       └── prod.yaml
+    └── python-publish/
         ├── template.yaml
         └── env_templates/
             ├── dev.yaml
@@ -76,147 +35,54 @@ ai_yaml_validator/
             └── prod.yaml
 ```
 
----
-
-## 🧪 Usage
-
-### 🔍 Validate a Single YAML File
-
-```bash
-python validator.py --template dotnet --input path/to/your.yaml
-```
-
-### 🔧 Validate and Auto-Fix a Single YAML File
-
-```bash
-python validator.py --template dotnet --input path/to/your.yaml --fix
-```
+* Each `template.yaml` defines the expected structure for a workflow.
+* `env_templates/` contains actual environment-specific YAMLs (`dev.yaml`, etc.)
 
 ---
 
-## 🌍 Environment-Based Validation
+## ✅ Setup Instructions
 
-### ✅ Validate a Specific Environment (e.g. `dev.yaml`)
-
-```bash
-python validator.py --template dotnet --env dev
-```
-
-### 🔧 Validate & Auto-Fix Specific Environment
+1. **Install Python**
 
 ```bash
-python validator.py --template dotnet --env dev --fix
+py --version
 ```
 
-> Generates: `templates/dotnet/env_templates/dev_fixed.yaml`
+Ensure Python 3.8+ is installed.
 
 ---
 
-### ✅ Validate All Environments (`dev.yaml`, `staging.yaml`, `prod.yaml`)
+2. **Create a Virtual Environment**
 
 ```bash
-python validator.py --template dotnet --envs
-```
-
-### 🔧 Validate & Auto-Fix All Environments
-
-```bash
-python validator.py --template dotnet --envs --fix
-```
-
-> Generates:
->
-> * `dev_fixed.yaml`
-> * `staging_fixed.yaml`
-> * `prod_fixed.yaml`
-
----
-
-## 📊 Output Example
-
-```bash
-📊 Validation Summary
-
-┏━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━┓
-┃ Environment   ┃ Status             ┃ Fixed File            ┃
-┡━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━┩
-│ dev           │ ✅ Valid           │ —                     │
-│ staging       │ ❌ Issues Found    │ staging_fixed.yaml    │
-│ prod          │ ✅ Valid           │ —                     │
-└───────────────┴────────────────────┴───────────────────────┘
+py -m venv .venv
 ```
 
 ---
 
-## ➕ Add a New Template
+3. **Activate the Virtual Environment**
 
-To add a new template (e.g., `python-publish`):
+* **Windows (CMD):**
 
-1. Create a folder under `templates/python-publish/`
-2. Add a base `template.yaml` (this is your reference schema)
-3. Add environment-specific files in `env_templates/`:
+  ```bash
+  .venv\Scripts\activate
+  ```
 
-   * `dev.yaml`
-   * `staging.yaml`
-   * `prod.yaml`
+* **Windows (PowerShell):**
 
-Example:
+  ```bash
+  .venv\Scripts\Activate.ps1
+  ```
 
-```
-templates/
-└── python-publish/
-    ├── template.yaml
-    └── env_templates/
-        ├── dev.yaml
-        ├── staging.yaml
-        └── prod.yaml
-```
+* **macOS/Linux:**
 
-Then validate:
-
-```bash
-python validator.py --template python-publish --envs --fix
-```
+  ```bash
+  source .venv/bin/activate
+  ```
 
 ---
 
-## 🧠 Features
-
-* ✅ Rule-based structural validation
-* ✅ Detects missing keys
-* ✅ Auto-fix mode (optional)
-* ✅ Environment-aware checks (dev/staging/prod)
-* ✅ Summary report with color-coded results
-
----
-
-## 🛠️ Troubleshooting
-
-### ❗ UnicodeDecodeError on Windows
-
-If you see an error like:
-
-```
-UnicodeDecodeError: 'charmap' codec can't decode byte 0x90
-```
-
-Update your `schema_loader.py` to use UTF-8 explicitly:
-
-```python
-with open(filepath, 'r', encoding='utf-8') as file:
-```
-
----
-
-## 📌 Requirements
-
-```
-pyyaml
-deepdiff
-rich
-```
-
-Install with:
+4. **Install Dependencies**
 
 ```bash
 pip install -r requirements.txt
@@ -224,4 +90,51 @@ pip install -r requirements.txt
 
 ---
 
+## 🚀 How to Run the Validator
+
+### ✅ Validate a Single Template (e.g., `dotnet`)
+
+```bash
+python validator.py --templates dotnet
+```
+
+### ✅ Validate Multiple Templates
+
+```bash
+python validator.py --templates dotnet python-publish
+```
+
+### 🛠️ Validate and Auto-Fix Missing or Misconfigured Sections
+
+```bash
+python validator.py --templates dotnet python-publish --fix
+```
+
+This will generate new files like:
+
+```
+templates/dotnet/env_templates/dev_fixed.yaml
+templates/python-publish/env_templates/staging_fixed.yaml
+```
+
+Only created if issues are found.
+
+---
+
+## 🧠 Notes
+
+* Structural differences in fields like `"name"` or `"branches"` under `push` are ignored automatically as they're considered environment-specific.
+* If a YAML file is valid, no `_fixed.yaml` is generated.
+* Only `dev.yaml`, `staging.yaml`, and `prod.yaml` are currently scanned for each template.
+
+---
+
+## 📦 Sample Command Summary
+
+| Action                         | Command                                                       |
+| ------------------------------ | ------------------------------------------------------------- |
+| Validate only `dotnet`         | `python validator.py --templates dotnet`                      |
+| Validate only `python-publish` | `python validator.py --templates python-publish`              |
+| Validate both templates        | `python validator.py --templates dotnet python-publish`       |
+| Validate & auto-fix            | `python validator.py --templates dotnet python-publish --fix` |
 

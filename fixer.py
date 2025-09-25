@@ -1,18 +1,32 @@
-def auto_fix(template, actual):
+def fix_config(template, config):
     """
-    Recursively add missing keys from the template to the actual config.
+    Fix config by ensuring it has all keys from template.
+    For missing keys, copy from template.
+    For lists, only fix first item.
     """
-    if isinstance(template, dict):
-        if not isinstance(actual, dict):
-            return template
+    if isinstance(template, dict) and isinstance(config, dict):
+        fixed = {}
         for key in template:
-            if key not in actual:
-                actual[key] = template[key]
+            if key in config:
+                fixed[key] = fix_config(template[key], config[key])
             else:
-                actual[key] = auto_fix(template[key], actual[key])
-    elif isinstance(template, list):
-        if not isinstance(actual, list):
-            return template
-        for i in range(min(len(template), len(actual))):
-            actual[i] = auto_fix(template[i], actual[i])
-    return actual
+                fixed[key] = template[key]
+        # Add any extra keys present in config (not in template)
+        for key in config:
+            if key not in fixed:
+                fixed[key] = config[key]
+        return fixed
+    elif isinstance(template, list) and isinstance(config, list):
+        if len(template) == 0:
+            return config
+        fixed_list = []
+        if len(config) > 0:
+            fixed_list.append(fix_config(template[0], config[0]))
+            # Append remaining items as-is
+            fixed_list.extend(config[1:])
+        else:
+            fixed_list = template
+        return fixed_list
+    else:
+        # For primitives or type mismatch, prefer config's value
+        return config

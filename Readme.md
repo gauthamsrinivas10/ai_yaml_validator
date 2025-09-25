@@ -224,15 +224,4 @@ pip install -r requirements.txt
 
 ---
 
-## 📜 License
 
-MIT License (or your choice)
-
-```
-
----
-
-## ✅ You're Ready!
-
-Let me know if you'd like this converted into a GitHub repo template or packaged as a CLI tool (`ai-validate`).
-```
